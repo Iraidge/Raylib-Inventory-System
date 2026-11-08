@@ -44,7 +44,11 @@ float btnSellCooldown = 0.0f;
 int gold = 0; // Amount of gold we receive from selling items
 
 std::string ResourcePath(const char* relativePath){
-    return std::string(GetApplicationDirectory()) + "../resources/" + relativePath;
+    std::string applicationDirectory = GetApplicationDirectory();
+    std::string besideExecutable = applicationDirectory + "resources/" + relativePath;
+    if(FileExists(besideExecutable.c_str())) return besideExecutable;
+
+    return applicationDirectory + "../resources/" + relativePath;
 }
 
 // FUNCTION DECLARATION
