@@ -32,6 +32,11 @@ cmake ..
 cmake --build .
 ```
 
+## Play with no Build
+If you don't want to build the project yourself, you can now play it directly by launching the `.exe` file.
+You can find the project here on [itch.io](https://iraidge.itch.io/advanced-inventory-system-prototype).
+Follow the **"How to Install"** section, and you'll be able to play it.
+
 ## Assets and Credits
 All UI and buttons were drawn by myself
 Sounds were taken from:<br>
