@@ -1,5 +1,6 @@
 #include "raylib.h"
 #include <cstdio>
+#include <string>
 
 #define COLS 5
 #define ROWS 5
@@ -42,6 +43,9 @@ float btnAddCooldown = 0.0f; // Cooldowns for buttons, to implement clicking ani
 float btnSellCooldown = 0.0f;
 int gold = 0; // Amount of gold we receive from selling items
 
+std::string ResourcePath(const char* relativePath){
+    return std::string(GetApplicationDirectory()) + "../resources/" + relativePath;
+}
 
 // FUNCTION DECLARATION
 void AddRandomItem(Cell inventory[5][5], Sound fxAddItem); // Adds a random item to the nearest available slot with an index between 0 and 24
@@ -62,19 +66,19 @@ int main(){
 
     // UI TEXTURES
     // Loading Texture2D to use them later in while(!WindowShouldClose())
-    Texture2D frame = LoadTexture("../resources/ui/ItemFrame.png");
-    Texture2D btnAddInactive = LoadTexture("../resources/ui/btnAddItemInactive.png");
-    Texture2D btnAddPressed = LoadTexture("../resources/ui/btnAddItemPressed.png");
-    Texture2D SellZone = LoadTexture("../resources/ui/SellZone.png");
-    Texture2D GoldenCoin = LoadTexture("../resources/ui/GoldenCoin.png");
-    Texture2D MouseCursor = LoadTexture("../resources/ui/RedCursor.png");
-    Texture2D btnSellAllInactive = LoadTexture("../resources/ui/btnSellAllInactive.png");
-    Texture2D btnSellAllPressed = LoadTexture("../resources/ui/btnSellAllPressed.png");
+    Texture2D frame = LoadTexture(ResourcePath("ui/ItemFrame.png").c_str());
+    Texture2D btnAddInactive = LoadTexture(ResourcePath("ui/btnAddItemInactive.png").c_str());
+    Texture2D btnAddPressed = LoadTexture(ResourcePath("ui/btnAddItemPressed.png").c_str());
+    Texture2D SellZone = LoadTexture(ResourcePath("ui/SellZone.png").c_str());
+    Texture2D GoldenCoin = LoadTexture(ResourcePath("ui/GoldenCoin.png").c_str());
+    Texture2D MouseCursor = LoadTexture(ResourcePath("ui/RedCursor.png").c_str());
+    Texture2D btnSellAllInactive = LoadTexture(ResourcePath("ui/btnSellAllInactive.png").c_str());
+    Texture2D btnSellAllPressed = LoadTexture(ResourcePath("ui/btnSellAllPressed.png").c_str());
     
     // SOUND CUES
-    Sound fxAddItem = LoadSound("../resources/sounds/fxButtonAddItem.wav");
-    Sound fxButtonPress = LoadSound("../resources/sounds/fxButtonAddItemPressed.wav");
-    Sound fxSell = LoadSound("../resources/sounds/cha-ching.wav");
+    Sound fxAddItem = LoadSound(ResourcePath("sounds/fxButtonAddItem.wav").c_str());
+    Sound fxButtonPress = LoadSound(ResourcePath("sounds/fxButtonAddItemPressed.wav").c_str());
+    Sound fxSell = LoadSound(ResourcePath("sounds/cha-ching.wav").c_str());
     
     Cell inventory[5][5] = {0}; // Assign twenty-five elements with 0 at the start,
                                 // to make cells for items
@@ -370,12 +374,10 @@ void DrawInventory(Cell inventory[5][5], Texture2D& frame){
 Texture2D GetItemTexture(int ItemID){
     // id == 0 means texture not yet loaded (raylib default for empty Texture2D)
     if(itemCache[ItemID].id == 0){
-        char path[64]; // Allocating 64 bytes that will represent path to textures
-        // snprintf, gets the path and assigns ItemID to each texture
-        snprintf(path, sizeof(path), "../resources/items/item%d.png", ItemID);
+        std::string path = ResourcePath(TextFormat("items/item%d.png", ItemID));
         // Load texture into itemCache, assigning it a unique GPU ID
         // that will help us to identify them
-        itemCache[ItemID] = LoadTexture(path);
+        itemCache[ItemID] = LoadTexture(path.c_str());
 
         // Filters Textures, so we can resize them without blur (due to them being PixelArt)
         SetTextureFilter(itemCache[ItemID], TEXTURE_FILTER_POINT);
